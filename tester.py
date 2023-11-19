@@ -54,7 +54,9 @@ class Tester:
         tryN(buttonAuth[0].click, 5, 1)
 
     def initiate(self):
-        for action in [["button", "Начать"], ["button", "Заявитель"], ["list", "Перечень", "Исключить патентного"]]:
+        for action in [["button", "Начать"], ["button", "Заявитель"], ["list", "Перечень", "Аттестоваться"], ["button", "Продолжить"],
+                       ["button", "Да"], ["button", "Признание результатов"], ["button", "Да"], ["button", "Нет"], ["button", "Перейти"], ["button", "Верно"],
+                       ["input", "телефона", "1234567890"]]:
             if action[0] == "button":
                 button = self._waitGetElement((By.XPATH, f"//epgu-constructor-screen-resolver//button//*[contains(text(),'{action[1]}')]"))
                 button[0].click()
@@ -63,6 +65,9 @@ class Tester:
                 listOpen[0].click()
                 listEl = self._waitGetElement((By.XPATH, f"//epgu-constructor-screen-resolver//epgu-constructor-dropdown[contains(.,'{action[1]}')]//*[contains(@class,'dropdown-list-wrapper')]//*[contains(@class,'dropdown-item')]//*[contains(.,'{action[2]}')]"))
                 listEl[0].click()
+            if action[0] == "input":
+                inputEl = self._waitGetElement((By.XPATH, f"//epgu-constructor-screen-resolver//epgu-constructor-component-item[contains(.,'{action[1]}')]//input"))
+                inputEl[0].send_keys(action[2])
 
     def tmp(self):
         self.driver.get(f"http://localhost:8080")
