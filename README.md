@@ -6,7 +6,7 @@ and put it's location into config.py
 
 TODO
 
-repeatable block
+repeatable block, checkobxes
 
 proper Action file where can specify "find by label" and click/send-keys
 
