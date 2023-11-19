@@ -53,6 +53,7 @@ class Driver:
     def initiate(self):
         for action in Actions(config.SCENE_FILEPATH):
             action.perform(self.driver)
+            time.sleep(config.DELAY_BETWEEN_ACTIONS)
 
     def run(self):
         self.auth(config.AUTH_EMAIL, config.AUTH_PASS)
@@ -61,4 +62,6 @@ class Driver:
         self.initiate()
         if config.CLOSE_AFTER_TEST:
             time.sleep(config.WAIT_AFTER_TEST)
-
+        else:
+            while True:
+                pass
