@@ -54,15 +54,7 @@ class Driver:
         for action in Actions("scenes/619069.scn"):
             action.perform(self.driver)
 
-    def tmp(self):
-        self.driver.get(f"http://localhost:8080")
-        allElements = Action.waitGetElement(self.driver, (By.XPATH, "//div//span[contains(@class, 'a')][contains(@class, 'b')]"))
-        for x in allElements:
-            print(x.tag_name, x.text, x.get_attribute("innerHTML"))
-        exit()
-
     def run(self):
-        #self.tmp()
         self.auth("esiatest002@yandex.ru", "11111111")
         self.role("Фамилия002 Имя002  Отчество002")
         self.chooseService(619069)
