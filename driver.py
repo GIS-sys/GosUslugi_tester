@@ -1,6 +1,6 @@
 from action import Action
 from actions import Actions
-from config import GECKODRIVER_PATH
+import config
 from utils import tryN
 
 import time
@@ -14,7 +14,7 @@ class Driver:
     def __init__(self):
         self.options = Options()
         self.options.headless = False
-        self.driver = webdriver.Firefox(executable_path=GECKODRIVER_PATH, options=self.options)
+        self.driver = webdriver.Firefox(executable_path=config.GECKODRIVER_PATH, options=self.options)
 
     def __del__(self):
         self.driver.quit()
@@ -51,14 +51,14 @@ class Driver:
         tryN(buttonAuth[0].click, 5, 1)
 
     def initiate(self):
-        for action in Actions("scenes/619069.scn"):
+        for action in Actions(config.SCENE_FILEPATH):
             action.perform(self.driver)
 
     def run(self):
-        self.auth("esiatest002@yandex.ru", "11111111")
-        self.role("Фамилия002 Имя002  Отчество002")
-        self.chooseService(619069)
+        self.auth(config.AUTH_EMAIL, config.AUTH_PASS)
+        self.role(config.AUTH_ROLE)
+        self.chooseService(config.SERVICE_CODE)
         self.initiate()
-        time.sleep(10)
-
+        if config.CLOSE_AFTER_TEST:
+            time.sleep(config.WAIT_AFTER_TEST)
 
