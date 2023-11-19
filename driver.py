@@ -10,7 +10,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 import random
 
-class Tester:
+class Driver:
     def __init__(self):
         self.options = Options()
         self.options.headless = False
