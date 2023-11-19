@@ -29,6 +29,8 @@ class Action(ABC):
             return ActionFileUpload(ext=lis[1])
         if lis[0] == "vm":
             return ActionDownloadVm()
+        if lis[0] == "checkbox":
+            return ActionCheckbox(label=lis[1])
         raise Exception("Action.fromList got unexpected action type")
 
     @staticmethod
@@ -118,4 +120,13 @@ class ActionDownloadVm(ActionO):
             add="button[contains(@class,'download_button')]"
         ))
         buttonDownload[0].click()
+
+class ActionCheckbox(ActionO):
+    def __init__(self, label):
+        self.label = label
+
+    def perform(self, driver):
+        print(f"Нажимаю чекбокс '{self.label}'")
+        checkbox = Action.waitGetElement(driver, Action.getXpathBy(tag="epgu-cf-ui-constructor-constructor-checkbox", label=self.label, add="span[contains(@class,'checkbox')]"))
+        checkbox[0].click()
 
