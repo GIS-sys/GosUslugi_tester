@@ -15,6 +15,10 @@ class Action(ABC):
         raise Exception("Action.fromList got unexpected action type")
 
     @staticmethod
+    def fromLine(line):
+        return Action.fromList(eval(line))
+
+    @staticmethod
     def waitGetElement(driver, args):
         return WebDriverWait(driver, 10).until(EC.presence_of_all_elements_located(args))
 
@@ -32,6 +36,7 @@ class ActionButton(ActionO):
         self.label = label
 
     def perform(self, driver):
+        print("button", self.label)
         button = Action.waitGetElement(driver, (By.XPATH, f"//epgu-constructor-screen-resolver//button//*[contains(text(),'{self.label}')]"))
         button[0].click()
 
@@ -41,6 +46,7 @@ class ActionList(ActionO):
         self.choice = choice
 
     def perform(self, driver):
+        print("list", self.label, self.choice)
         listOpen = Action.waitGetElement(driver, (By.XPATH, f"//epgu-constructor-screen-resolver//epgu-constructor-dropdown[contains(.,'{self.label}')]//input[contains(@class,'focusable-input')]"))
         listOpen[0].click()
         listEl = Action.waitGetElement(driver, (By.XPATH, f"//epgu-constructor-screen-resolver//epgu-constructor-dropdown[contains(.,'{self.label}')]//*[contains(@class,'dropdown-list-wrapper')]//*[contains(@class,'dropdown-item')]//*[contains(.,'{self.choice}')]"))
@@ -52,5 +58,6 @@ class ActionInput(ActionO):
         self.text = text
 
     def perform(self, driver):
+        print("input", self.label, self.text)
         inputEl = Action.waitGetElement(driver, (By.XPATH, f"//epgu-constructor-screen-resolver//epgu-constructor-component-item[contains(.,'{self.label}')]//input"))
         inputEl[0].send_keys(self.text)

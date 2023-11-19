@@ -1,4 +1,5 @@
 from action import Action
+from actions import Actions
 from config import GECKODRIVER_PATH
 from utils import tryN
 
@@ -50,10 +51,8 @@ class Driver:
         tryN(buttonAuth[0].click, 5, 1)
 
     def initiate(self):
-        for action in [["button", "Начать"], ["button", "Заявитель"], ["list", "Перечень", "Аттестоваться"], ["button", "Продолжить"],
-                       ["button", "Да"], ["button", "Признание результатов"], ["button", "Да"], ["button", "Нет"], ["button", "Перейти"], ["button", "Верно"],
-                       ["input", "телефона", "1234567890"]]:
-            Action.fromList(action).perform(self.driver)
+        for action in Actions("scenes/619069.scn"):
+            action.perform(self.driver)
 
     def tmp(self):
         self.driver.get(f"http://localhost:8080")
