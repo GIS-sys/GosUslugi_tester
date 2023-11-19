@@ -42,10 +42,15 @@ class Action(ABC):
         res = ["//epgu-constructor-screen-resolver"]
         if inside_component:
             res = addStringOrList(res, "//epgu-constructor-component-item", lambda x, y: (x + y))
-        if not (label is None):
-            res = addStringOrList(res, label, lambda x, y: (x + "[contains(.,'{label}')]".format(label=y)))
-        if not (tag is None):
-            res = addStringOrList(res, tag, lambda x, y: (x + "//{tag}".format(tag=y)))
+            if not (label is None):
+                res = addStringOrList(res, label, lambda x, y: (x + "[contains(.,'{label}')]".format(label=y)))
+            if not (tag is None):
+                res = addStringOrList(res, tag, lambda x, y: (x + "//{tag}".format(tag=y)))
+        else:
+            if not (tag is None):
+                res = addStringOrList(res, tag, lambda x, y: (x + "//{tag}".format(tag=y)))
+            if not (label is None):
+                res = addStringOrList(res, label, lambda x, y: (x + "[contains(.,'{label}')]".format(label=y)))
         res = '|'.join(res)
         print(res)
         return (By.XPATH, res)
@@ -61,7 +66,7 @@ class ActionButton(ActionO):
 
     def perform(self, driver):
         print(f"Нажимаю на кнопку '{self.label}'")
-        button = Action.waitGetElement(driver, (By.XPATH, f"//epgu-constructor-screen-resolver//button//*[contains(text(),'{self.label}')]"))
+        button = Action.waitGetElement(driver, Action.getXpathBy(inside_component=False, tag="button", label=self.label))
         button[0].click()
 
 class ActionList(ActionO):
