@@ -3,18 +3,26 @@ from actions import Actions
 import config
 from utils import tryN
 
-import time
+import os
+import random
 import selenium
+import time
 from selenium import webdriver
 from selenium.webdriver.firefox.options import Options
 from selenium.webdriver.common.by import By
-import random
 
 class Driver:
     def __init__(self):
+        self.DOWNLOAD_PATH = os.getcwd() + "/download"
+        os.makedirs(self.DOWNLOAD_PATH, exist_ok=True)
         self.options = Options()
         self.options.headless = False
-        self.driver = webdriver.Firefox(executable_path=config.GECKODRIVER_PATH, options=self.options)
+        self.profile = webdriver.FirefoxProfile()
+        self.profile.set_preference("browser.download.folderList", 2)
+        self.profile.set_preference("browser.download.manager.showWhenStarting", False)
+        self.profile.set_preference("browser.download.dir", self.DOWNLOAD_PATH)
+        self.profile.set_preference("browser.helperApps.neverAsk.saveToDisk", "application/octet-stream")
+        self.driver = webdriver.Firefox(firefox_profile=self.profile, executable_path=config.GECKODRIVER_PATH, options=self.options)
 
     def __del__(self):
         self.driver.quit()
