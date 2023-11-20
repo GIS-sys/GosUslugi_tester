@@ -7,6 +7,7 @@ import os
 import random
 import selenium
 import time
+import selenium
 from selenium import webdriver
 from selenium.webdriver.firefox.options import Options
 from selenium.webdriver.common.by import By
@@ -60,7 +61,15 @@ class Driver:
 
     def initiate(self):
         for action in Actions(config.SCENE_FILEPATH):
-            action.perform(self.driver)
+            try:
+                action.perform(self.driver)
+            except selenium.common.exceptions.TimeoutException as e:
+                print(f"Action has timed out")
+                test = self.driver.execute_script("var performance = window.performance || window.mozPerformance || window.msPerformance || window.webkitPerformance || {}; var network = performance.getEntries() || {}; return network;")
+                with open(config.LOG_FILE, "a") as f:
+                    for item in test:
+                        f.write(str(item))
+                break
             time.sleep(config.DELAY_BETWEEN_ACTIONS)
 
     def run(self):
