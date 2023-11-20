@@ -38,7 +38,6 @@ class Driver:
         inputEmail[0].send_keys(email)
         inputPassword[0].send_keys(password)
         buttonAuth[0].click()
-        time.sleep(1)
 
     def role(self, role):
         self.driver.get("https://svcdev-roles.test.gosuslugi.ru/")
@@ -75,9 +74,10 @@ class Driver:
 
     def run(self, scene):
         self.auth(config.AUTH_EMAIL, config.AUTH_PASS)
+        time.sleep(2)
         self.role(config.AUTH_ROLE)
-        self.chooseService(scene[0])
-        self.initiate(scene[1])
+        self.chooseService(scene.getNumber())
+        self.initiate(scene.getPath())
         if config.CLOSE_AFTER_TEST:
             time.sleep(config.WAIT_AFTER_TEST)
         else:
