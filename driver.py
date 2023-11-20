@@ -68,7 +68,7 @@ class Driver:
                 test = self.driver.execute_script("var performance = window.performance || window.mozPerformance || window.msPerformance || window.webkitPerformance || {}; var network = performance.getEntries() || {}; return network;")
                 with open(config.LOG_FILE, "a") as f:
                     for item in test:
-                        f.write(str(item))
+                        f.write(str(item) + "\n")
                 break
             time.sleep(config.DELAY_BETWEEN_ACTIONS)
 
