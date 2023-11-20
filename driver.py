@@ -38,6 +38,7 @@ class Driver:
         inputEmail[0].send_keys(email)
         inputPassword[0].send_keys(password)
         buttonAuth[0].click()
+        time.sleep(1)
 
     def role(self, role):
         self.driver.get("https://svcdev-roles.test.gosuslugi.ru/")
@@ -59,8 +60,8 @@ class Driver:
             raise Exception("Role chosing page is not loaded properly")
         tryN(buttonAuth[0].click, 5, 1)
 
-    def initiate(self):
-        for action in Actions(config.SCENE_FILEPATH):
+    def initiate(self, filepath):
+        for action in Actions(filepath):
             try:
                 action.perform(self.driver)
             except selenium.common.exceptions.TimeoutException as e:
@@ -72,11 +73,11 @@ class Driver:
                 break
             time.sleep(config.DELAY_BETWEEN_ACTIONS)
 
-    def run(self):
+    def run(self, scene):
         self.auth(config.AUTH_EMAIL, config.AUTH_PASS)
         self.role(config.AUTH_ROLE)
-        self.chooseService(config.SERVICE_CODE)
-        self.initiate()
+        self.chooseService(scene[0])
+        self.initiate(scene[1])
         if config.CLOSE_AFTER_TEST:
             time.sleep(config.WAIT_AFTER_TEST)
         else:

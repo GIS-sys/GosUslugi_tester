@@ -9,9 +9,3 @@ unpack and put it's location into config.py
 
 3) run ```python main.py``` to execute script
 
-
-
-# TODO
-
-1) if encountered error - save info from console + last network request
-
