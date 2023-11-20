@@ -41,7 +41,7 @@ class Driver:
 
     def role(self, role):
         self.driver.get("https://svcdev-roles.test.gosuslugi.ru/")
-        buttonRole = Action.waitGetElement(self.driver, (By.CLASS_NAME, 'role'))
+        buttonRole = tryN(lambda: Action.waitGetElement(self.driver, (By.CLASS_NAME, 'role')), 2, 1)
         for button in buttonRole:
             if button.get_property("title").startswith(role):
                 tryN(button.click, 5, 1)
