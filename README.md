@@ -1,12 +1,11 @@
 1) download firefox geckodriver:
 https://github.com/mozilla/geckodriver/releases
 
-and put it's location into config.py
+unpack and put it's location into config.py
 
+2) change config.py to choose service / scene
 
-TODO
+2\*) add / change scene in ```scenes/``` folder if needed
 
-repeatable block, checkobxes
-
-proper Action file where can specify "find by label" and click/send-keys
+3) run ```python main.py``` to execute script
 
