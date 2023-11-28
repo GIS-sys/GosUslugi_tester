@@ -5,6 +5,7 @@
 ["button", "ГУ"]
 ["button", "Да"]
 ["button", "Да"]
+["button", "Да"]
 ["button", "Нет"]
 ["button", "Нет"]
 ["button", "Да"]
@@ -38,7 +39,7 @@
 
 ["file", "docx"]
 ["button", "Перейти"]
-["file", "png"]
+["file", "zip"]
 ["button", "Перейти"]
 
 ["vm"]
