@@ -4,7 +4,7 @@ GECKODRIVER_PATH = "/usr/bin/geckodriver"
 AUTH_EMAIL = "esiatest002@yandex.ru"
 AUTH_PASS = "11111111"
 # role name - needs to match exactly
-AUTH_ROLE = "Фамилия002 Имя002  Отчество002"
+AUTH_ROLE = "Петров Петр  Петрович"
 
 # delay between each interaction with browser
 # if you have problems with script missing some clicks, consider setting it to a higher value
