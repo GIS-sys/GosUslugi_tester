@@ -1,4 +1,5 @@
 from driver import Driver
+from logger import Logger
 import os
 
 
@@ -43,6 +44,6 @@ if __name__ == "__main__":
     scenes = inputScenes()
     dataForRun = [Scene(scene) for scene in scenes]
     for scene in dataForRun:
-        print(f"\nRunning {scene.getName()}...")
+        Logger.logScene(scene.getName())
         Driver().run(scene)
 

@@ -1,3 +1,4 @@
+import datetime
 import time
 
 def tryN(foo, N, delay):
@@ -13,4 +14,7 @@ def tryN(foo, N, delay):
                 exception = e
                 break
     raise exception
+
+def formattedDateTime():
+    return datetime.datetime.today().strftime('%Y_%m_%d_%H_%M_%S')
 

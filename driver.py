@@ -1,6 +1,7 @@
 from action import Action
 from actions import Actions
 import config
+from logger import Logger
 from utils import tryN
 
 import os
@@ -28,6 +29,9 @@ class Driver:
     def __del__(self):
         self.driver.quit()
 
+    def screenshot(self, filepath):
+        self.driver.save_screenshot(filepath)
+
     def auth(self, email, password):
         self.driver.get("https://esia-portal1.test.gosuslugi.ru/login/")
         inputEmail = Action.waitGetElement(self.driver, (By.ID, "login"))
@@ -53,7 +57,7 @@ class Driver:
         try:
             buttonAuth = Action.waitGetElement(self.driver, (By.XPATH, '//span[normalize-space()="Начать заново"]'))
         except selenium.common.exceptions.TimeoutException:
-            print("Отсутствует кнопка 'Начать заново', полагаю, что услуга уже началась")
+            Logger.log("Отсутствует кнопка 'Начать заново', полагаю, что услуга уже началась")
             return
         if len(buttonAuth) > 1:
             raise Exception("Role chosing page is not loaded properly")
@@ -64,7 +68,7 @@ class Driver:
             try:
                 action.perform(self.driver)
             except selenium.common.exceptions.TimeoutException as e:
-                print(f"Action has timed out")
+                Logger.logError("Action has timed out", self)
                 test = self.driver.execute_script("var performance = window.performance || window.mozPerformance || window.msPerformance || window.webkitPerformance || {}; var network = performance.getEntries() || {}; return network;")
                 with open(config.LOG_FILE, "a") as f:
                     for item in test:

@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+from logger import Logger
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
@@ -70,7 +71,7 @@ class ActionButton(ActionO):
         self.label = label
 
     def perform(self, driver):
-        print(f"Нажимаю на кнопку '{self.label}'")
+        Logger.logStep(f"Нажимаю на кнопку '{self.label}'")
         button = Action.waitGetElement(driver, Action.getXpathBy(inside_component=False, tag="button[not(contains(@class,'disabled'))]", label=self.label))
         button[0].click()
 
@@ -80,7 +81,7 @@ class ActionList(ActionO):
         self.choice = choice
 
     def perform(self, driver):
-        print(f"Выбираю в списке '{self.label}' ответ '{self.choice}'")
+        Logger.logStep(f"Выбираю в списке '{self.label}' ответ '{self.choice}'")
         listOpen = Action.waitGetElement(driver, Action.getXpathBy(tag="input[contains(@class,'focusable-input')]", label=self.label))
         listOpen[0].click()
         listEl = Action.waitGetElement(driver, Action.getXpathBy(
@@ -97,7 +98,7 @@ class ActionInput(ActionO):
         self.text = text
 
     def perform(self, driver):
-        print(f"Пишу в поле '{self.label}' текст '{self.text}'")
+        Logger.logStep(f"Пишу в поле '{self.label}' текст '{self.text}'")
         inputEl = Action.waitGetElement(driver, Action.getXpathBy(tag=["input", "div[contains(@class,'multiline-input')]"], label=self.label))
         inputEl[0].send_keys(self.text)
 
@@ -106,13 +107,13 @@ class ActionFileUpload(ActionO):
         self.ext = ext
 
     def perform(self, driver):
-        print(f"Загружаю файл расширения '.{self.ext}'")
+        Logger.logStep(f"Загружаю файл расширения '.{self.ext}'")
         inputUpload = Action.waitGetElement(driver, Action.getXpathBy(inside_component=False, tag="input[contains(@type,'file')]"))
         inputUpload[0].send_keys(f"{os.getcwd()}/files/tmp.{self.ext}")
 
 class ActionDownloadVm(ActionO):
     def perform(self, driver):
-        print(f"Скачиваю VM-шаблон")
+        Logger.logStep(f"Скачиваю VM-шаблон")
         buttonDownload = Action.waitGetElement(driver, Action.getXpathBy(
             inside_component=False,
             tag="epgu-constructor-uploader-manager-item",
@@ -126,7 +127,7 @@ class ActionCheckbox(ActionO):
         self.label = label
 
     def perform(self, driver):
-        print(f"Нажимаю чекбокс '{self.label}'")
+        Logger.logStep(f"Нажимаю чекбокс '{self.label}'")
         checkbox = Action.waitGetElement(driver, Action.getXpathBy(tag="epgu-cf-ui-constructor-constructor-checkbox", label=self.label, add="span[contains(@class,'checkbox')]"))
         checkbox[0].click()
 

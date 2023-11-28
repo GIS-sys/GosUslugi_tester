@@ -8,11 +8,13 @@ class A:
       raise Exception("aaa")
     return self.N
 
-assert(tryN(A(1).do, 5) == -1)
-assert(tryN(A(4).do, 5) == -1)
+MICRO_DELAY = 0.01
+
+assert(tryN(A(1).do, 5, MICRO_DELAY) == -1)
+assert(tryN(A(4).do, 5, MICRO_DELAY) == -1)
 
 try:
-    tryN(A(5).do, 5)
+    tryN(A(5).do, 5, MICRO_DELAY)
     assert(False)
 except:
     pass
