@@ -1,4 +1,5 @@
 import datetime
+import glob
 import time
 
 def tryN(foo, N, delay):
@@ -17,4 +18,7 @@ def tryN(foo, N, delay):
 
 def formattedDateTime():
     return datetime.datetime.today().strftime('%Y_%m_%d_%H_%M_%S')
+
+def findFilesByRegex(path, regex):
+    return glob.glob(regex, recursive=True)
 
