@@ -10,7 +10,7 @@ AUTH_ROLE = "Петров Петр  Петрович"
 # if you have problems with script missing some clicks, consider setting it to a higher value
 DELAY_BETWEEN_ACTIONS = 0.1
 # if set to True, will close browser automatically after completing all actions
-CLOSE_AFTER_TEST = True
+CLOSE_AFTER_TEST = False
 # if previous setting is set to True, this will determine how many seconds will browser wait before automatically closing
 WAIT_AFTER_TEST = 1
 

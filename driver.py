@@ -32,11 +32,14 @@ class Driver:
     def screenshot(self, filepath):
         self.driver.save_screenshot(filepath)
 
+    def get_screen_id(self):
+        return Action.waitGetElement(self, (By.XPATH, '//epgu-constructor-form-player'))[0].get_attribute("data-test-screen-id")
+
     def auth(self, email, password):
         self.driver.get("https://esia-portal1.test.gosuslugi.ru/login/")
-        inputEmail = Action.waitGetElement(self.driver, (By.ID, "login"))
-        inputPassword = Action.waitGetElement(self.driver, (By.ID, "password"))
-        buttonAuth = Action.waitGetElement(self.driver, (By.XPATH, '//button[normalize-space()="Войти"]'))
+        inputEmail = Action.waitGetElement(self, (By.ID, "login"))
+        inputPassword = Action.waitGetElement(self, (By.ID, "password"))
+        buttonAuth = Action.waitGetElement(self, (By.XPATH, '//button[normalize-space()="Войти"]'))
         if len(inputEmail) != 1 or len(inputPassword) != 1 or len(buttonAuth) != 1:
             raise Exception("Authentification page is not loaded properly")
         inputEmail[0].send_keys(email)
@@ -45,7 +48,7 @@ class Driver:
 
     def role(self, role):
         self.driver.get("https://svcdev-roles.test.gosuslugi.ru/")
-        buttonRole = tryN(lambda: Action.waitGetElement(self.driver, (By.CLASS_NAME, 'role')), 2, 1)
+        buttonRole = tryN(lambda: Action.waitGetElement(self, (By.CLASS_NAME, 'role')), 2, 1)
         for button in buttonRole:
             if button.get_property("title").startswith(role):
                 tryN(button.click, 5, 1)
@@ -55,7 +58,7 @@ class Driver:
     def chooseService(self, code):
         self.driver.get(f"http://svcdev-beta.test.gosuslugi.ru/{code}/1/form")
         try:
-            buttonAuth = Action.waitGetElement(self.driver, (By.XPATH, '//span[normalize-space()="Начать заново"]'))
+            buttonAuth = Action.waitGetElement(self, (By.XPATH, '//span[normalize-space()="Начать заново"]'))
         except selenium.common.exceptions.TimeoutException:
             Logger.warning("Отсутствует кнопка 'Начать заново', полагаю, что услуга уже началась")
             return
@@ -66,9 +69,9 @@ class Driver:
     def initiate(self, filepath):
         for action in Actions(filepath):
             try:
-                action.perform(self.driver)
+                action.perform(self)
             except selenium.common.exceptions.TimeoutException as e:
-                Logger.logError("Action has timed out", self)
+                Logger.logError("Время ожидания действия истекло", self)
                 test = self.driver.execute_script("var performance = window.performance || window.mozPerformance || window.msPerformance || window.webkitPerformance || {}; var network = performance.getEntries() || {}; return network;")
                 with open(config.LOG_FILE, "a") as f:
                     for item in test:

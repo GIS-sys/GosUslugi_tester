@@ -45,7 +45,7 @@ class Action(ABC):
 
     @staticmethod
     def waitGetElement(driver, args):
-        return WebDriverWait(driver, 10).until(EC.presence_of_all_elements_located(args))
+        return WebDriverWait(driver.driver, 10).until(EC.presence_of_all_elements_located(args))
 
     @staticmethod
     def getXpathBy(inside_main_screen=False, inside_component=True, tag=None, label=None, add=None):
@@ -78,7 +78,7 @@ class ActionButton(ActionO):
         self.label = label
 
     def perform(self, driver):
-        Logger.logStep(f"Нажимаю на кнопку '{self.label}'")
+        Logger.logStep(f"Нажимаю на кнопку '{self.label}'", driver)
         button = Action.waitGetElement(driver, Action.getXpathBy(inside_component=False, tag="button[not(contains(@class,'disabled'))]", label=self.label))
         button[0].click()
 
@@ -88,7 +88,7 @@ class ActionList(ActionO):
         self.choice = choice
 
     def perform(self, driver):
-        Logger.logStep(f"Выбираю в списке '{self.label}' ответ '{self.choice}'")
+        Logger.logStep(f"Выбираю в списке '{self.label}' ответ '{self.choice}'", driver)
         listOpen = Action.waitGetElement(driver, Action.getXpathBy(inside_main_screen=True, tag="input[contains(@class,'focusable-input')]", label=self.label))
         listOpen[0].click()
         listEl = Action.waitGetElement(driver, Action.getXpathBy(
@@ -105,7 +105,7 @@ class ActionLookup(ActionO):
         self.choice = choice
 
     def perform(self, driver):
-        Logger.logStep(f"Выбираю в списке со словарём '{self.label}' ответ '{self.choice}'")
+        Logger.logStep(f"Выбираю в списке со словарём '{self.label}' ответ '{self.choice}'", driver)
         listOpen = Action.waitGetElement(driver, Action.getXpathBy(inside_main_screen=True, tag="input[contains(@class,'search-input')]", label=self.label))
         listOpen[0].click()
         listOpen[0].send_keys(self.choice)
@@ -124,7 +124,7 @@ class ActionInput(ActionO):
         self.text = text
 
     def perform(self, driver):
-        Logger.logStep(f"Пишу в поле '{self.label}' текст '{self.text}'")
+        Logger.logStep(f"Пишу в поле '{self.label}' текст '{self.text}'", driver)
         inputEl = Action.waitGetElement(driver, Action.getXpathBy(inside_main_screen=True, tag=["input", "div[contains(@class,'multiline-input')]", "textarea"], label=self.label))
         inputEl[0].send_keys(self.text)
 
@@ -134,7 +134,7 @@ class ActionAddress(ActionO):
         self.text = text
 
     def perform(self, driver):
-        Logger.logStep(f"Пишу в поле адреса '{self.label}' текст '{self.text}'")
+        Logger.logStep(f"Пишу в поле адреса '{self.label}' текст '{self.text}'", driver)
         inputEl = Action.waitGetElement(driver, Action.getXpathBy(inside_main_screen=True, tag=["textarea[contains(@class,'search-input')]"], label=self.label))
         inputEl[0].send_keys(self.text)
         labelEl = Action.waitGetElement(driver, Action.getXpathBy(tag=["p"], label=self.label))
@@ -145,13 +145,13 @@ class ActionFileUpload(ActionO):
         self.ext = ext
 
     def perform(self, driver):
-        Logger.logStep(f"Загружаю файл расширения '.{self.ext}'")
+        Logger.logStep(f"Загружаю файл расширения '.{self.ext}'", driver)
         inputUpload = Action.waitGetElement(driver, Action.getXpathBy(inside_component=False, tag="input[contains(@type,'file')]"))
         inputUpload[0].send_keys(f"{os.getcwd()}/files/tmp.{self.ext}")
 
 class ActionDownloadVm(ActionO):
     def perform(self, driver):
-        Logger.logStep(f"Скачиваю VM-шаблон")
+        Logger.logStep(f"Скачиваю VM-шаблон", driver)
         buttonDownload = Action.waitGetElement(driver, Action.getXpathBy(
             inside_component=False,
             tag="epgu-constructor-uploader-manager-item",
@@ -165,7 +165,7 @@ class ActionCheckbox(ActionO):
         self.label = label
 
     def perform(self, driver):
-        Logger.logStep(f"Нажимаю чекбокс '{self.label}'")
+        Logger.logStep(f"Нажимаю чекбокс '{self.label}'", driver)
         checkbox = Action.waitGetElement(driver, Action.getXpathBy(inside_main_screen=True, tag="epgu-cf-ui-constructor-constructor-checkbox", label=self.label, add="span[contains(@class,'checkbox')]"))
         checkbox[0].click()
 

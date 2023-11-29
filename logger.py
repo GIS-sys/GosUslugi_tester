@@ -20,7 +20,9 @@ class Logger:
         Logger.current_steps = []
 
     @staticmethod
-    def logStep(step):
+    def logStep(step, driver=None):
+        if not (driver is None):
+            step += f" (ID экрана: {driver.get_screen_id()})"
         Logger.info(step)
         Logger.current_steps.append(step)
 
