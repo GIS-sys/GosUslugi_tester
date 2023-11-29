@@ -1,5 +1,11 @@
+from enum import Enum
 import os
 from utils import formattedDateTime
+
+class LogLevel(Enum):
+    INFO = 0
+    WARNING = 1
+    ERROR = 2
 
 class Logger:
     LOG_PATH = os.getcwd() + "/logs"
@@ -9,18 +15,18 @@ class Logger:
 
     @staticmethod
     def logScene(scene):
-        print(f"Прохожу сценарий {scene} ...")
+        Logger.info(f"\nПрохожу сценарий {scene} ...")
         Logger.current_scene = scene
         Logger.current_steps = []
 
     @staticmethod
     def logStep(step):
-        print(step)
+        Logger.info(step)
         Logger.current_steps.append(step)
 
     @staticmethod
     def logError(msg, driver=None):
-        print(f"Ошибка: {msg}")
+        Logger.error(f"Ошибка: {msg}")
         log_prefix = f"{Logger.LOG_PATH}/{Logger.current_scene}_{formattedDateTime()}"
         with open(log_prefix + ".txt", "w") as f:
             f.write(f"Сценарий: {Logger.current_scene}\n")
@@ -29,9 +35,28 @@ class Logger:
             f.write(f"Ошибка: {msg}")
         if not (driver is None):
             driver.screenshot(log_prefix + ".png")
-        print(f"Логи ошибки: {log_prefix}")
+        Logger.error(f"Логи ошибки: {log_prefix}")
 
     @staticmethod
-    def log(msg):
-        print(msg)
+    def info(msg):
+        Logger.log(msg, LogLevel.INFO)
+
+    @staticmethod
+    def warning(msg):
+        Logger.log(msg, LogLevel.WARNING)
+
+    @staticmethod
+    def error(msg):
+        Logger.log(msg, LogLevel.ERROR)
+
+    @staticmethod
+    def log(msg, log_level):
+        if log_level == LogLevel.INFO:
+            print(f"{msg}")
+        elif log_level == LogLevel.WARNING:
+            print(f"\033[33m{msg}\033[0m")
+        elif log_level == LogLevel.ERROR:
+            print(f"\033[31m{msg}\033[0m")
+        else:
+            print(msg)
 

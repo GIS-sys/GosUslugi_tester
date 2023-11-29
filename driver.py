@@ -57,7 +57,7 @@ class Driver:
         try:
             buttonAuth = Action.waitGetElement(self.driver, (By.XPATH, '//span[normalize-space()="Начать заново"]'))
         except selenium.common.exceptions.TimeoutException:
-            Logger.log("Отсутствует кнопка 'Начать заново', полагаю, что услуга уже началась")
+            Logger.warning("Отсутствует кнопка 'Начать заново', полагаю, что услуга уже началась")
             return
         if len(buttonAuth) > 1:
             raise Exception("Role chosing page is not loaded properly")

@@ -13,20 +13,20 @@ class Scene:
 
     def check(self):
         if len(self.name) < 6:
-            print(f"Название файла сценария {self.name} должно начинаться с номера услуги, например: 618022_convert")
+            Logger.error(f"Название файла сценария {self.name} должно начинаться с номера услуги, например: 618022_convert")
             exit()
         try:
             int(self.name[:6])
         except ValueError:
-            print(f"Название файла сценария {self.name} должно начинаться с номера услуги, например: 618022_convert")
+            Logger.error(f"Название файла сценария {self.name} должно начинаться с номера услуги, например: 618022_convert")
             exit()
         paths = findFilesByRegex("scenes", f"**/{self.name}.scn")
         if not paths:
-            print(f"Должен существовать файл {self.getName()}")
+            Logger.error(f"Должен существовать файл {self.getName()}")
             exit()
         self.path = paths[0]
         if len(paths) > 1:
-            print(f"Предупреждение: было обнаружено несколько сценариев с именем {self.getName()}, использую {self.getPath()}")
+            Logger.warning(f"Предупреждение: было обнаружено несколько сценариев с именем {self.getName()}, использую {self.getPath()}")
 
     def getName(self):
         return self.name
@@ -38,8 +38,8 @@ class Scene:
         return int(self.name[:6])
 
 def inputScenes():
-    print("Введите названия сценариев, которые хотите запустить, через запятую или пробел (данные файлы с расширением .scn должны лежать в папке scenes или любой её подпапке).")
-    print("Например: 619069.scn, 618022_add_changes, 618022_convert")
+    Logger.info("Введите названия сценариев, которые хотите запустить, через запятую или пробел (данные файлы с расширением .scn должны лежать в папке scenes или любой её подпапке).")
+    Logger.info("Например: 619069.scn, 618022_add_changes, 618022_convert")
     scenes = input().replace(" ", ",").split(",")
     scenes = [x for x in scenes if x != ""]
     scenes = list(map(str.strip, scenes))
