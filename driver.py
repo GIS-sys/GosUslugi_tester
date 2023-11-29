@@ -73,16 +73,16 @@ class Driver:
                 with open(config.LOG_FILE, "a") as f:
                     for item in test:
                         f.write(str(item) + "\n")
-                break
+                return False
             time.sleep(config.DELAY_BETWEEN_ACTIONS)
+        return True
 
     def run(self, scene):
         self.auth(config.AUTH_EMAIL, config.AUTH_PASS)
         time.sleep(2)
         self.role(config.AUTH_ROLE)
         self.chooseService(scene.getNumber())
-        self.initiate(scene.getPath())
-        if config.CLOSE_AFTER_TEST:
+        if not self.initiate(scene.getPath()) or config.CLOSE_AFTER_TEST:
             time.sleep(config.WAIT_AFTER_TEST)
         else:
             while True:

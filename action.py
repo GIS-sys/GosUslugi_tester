@@ -4,6 +4,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 import os
+import time
 
 def addStringOrList(baseList, stringOrList, foo):
     if isinstance(stringOrList, str):
@@ -24,8 +25,12 @@ class Action(ABC):
             return ActionButton(label=lis[1])
         if lis[0] == "list":
             return ActionList(label=lis[1], choice=lis[2])
+        if lis[0] == "lookup":
+            return ActionLookup(label=lis[1], choice=lis[2])
         if lis[0] == "input":
             return ActionInput(label=lis[1], text=lis[2])
+        if lis[0] == "address":
+            return ActionAddress(label=lis[1], text=lis[2])
         if lis[0] == "file":
             return ActionFileUpload(ext=lis[1])
         if lis[0] == "vm":
@@ -92,6 +97,25 @@ class ActionList(ActionO):
         ))
         listEl[0].click()
 
+class ActionLookup(ActionO):
+    def __init__(self, label, choice):
+        self.label = label
+        self.choice = choice
+
+    def perform(self, driver):
+        Logger.logStep(f"Выбираю в списке со словарём '{self.label}' ответ '{self.choice}'")
+        listOpen = Action.waitGetElement(driver, Action.getXpathBy(tag="input[contains(@class,'search-input')]", label=self.label))
+        listOpen[0].click()
+        listOpen[0].send_keys(self.choice)
+        time.sleep(1)
+        listEl = Action.waitGetElement(driver, Action.getXpathBy(
+            inside_component=False,
+            tag="epgu-constructor-component-list-resolver",
+            label=self.label,
+            add=f"*[contains(@class,'lookup-list-container expanded')]//*[contains(@class,'lookup-item-text')]//*[contains(.,'{self.choice}')]"
+        ))
+        listEl[0].click()
+
 class ActionInput(ActionO):
     def __init__(self, label, text):
         self.label = label
@@ -99,8 +123,20 @@ class ActionInput(ActionO):
 
     def perform(self, driver):
         Logger.logStep(f"Пишу в поле '{self.label}' текст '{self.text}'")
-        inputEl = Action.waitGetElement(driver, Action.getXpathBy(tag=["input", "div[contains(@class,'multiline-input')]"], label=self.label))
+        inputEl = Action.waitGetElement(driver, Action.getXpathBy(tag=["input", "div[contains(@class,'multiline-input')]", "textarea"], label=self.label))
         inputEl[0].send_keys(self.text)
+
+class ActionAddress(ActionO):
+    def __init__(self, label, text):
+        self.label = label
+        self.text = text
+
+    def perform(self, driver):
+        Logger.logStep(f"Пишу в поле адреса '{self.label}' текст '{self.text}'")
+        inputEl = Action.waitGetElement(driver, Action.getXpathBy(tag=["textarea[contains(@class,'search-input')]"], label=self.label))
+        inputEl[0].send_keys(self.text)
+        labelEl = Action.waitGetElement(driver, Action.getXpathBy(tag=["p"], label=self.label))
+        labelEl[0].click()
 
 class ActionFileUpload(ActionO):
     def __init__(self, ext):
