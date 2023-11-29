@@ -154,8 +154,7 @@ class ActionDownloadVm(ActionO):
         Logger.logStep(f"Скачиваю VM-шаблон", driver)
         buttonDownload = Action.waitGetElement(driver, Action.getXpathBy(
             inside_component=False,
-            tag="epgu-constructor-uploader-manager-item",
-            label="application",
+            tag="epgu-constructor-uploader-manager-item[//img[contains(@src,'XML')]]",
             add="button[contains(@class,'download_button')]"
         ))
         buttonDownload[0].click()
