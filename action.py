@@ -48,8 +48,10 @@ class Action(ABC):
         return WebDriverWait(driver, 10).until(EC.presence_of_all_elements_located(args))
 
     @staticmethod
-    def getXpathBy(inside_component=True, tag=None, label=None, add=None):
+    def getXpathBy(inside_main_screen=False, inside_component=True, tag=None, label=None, add=None):
         res = ["//epgu-constructor-screen-resolver"]
+        if inside_main_screen:
+            res = addStringOrList(res, "//div[contains(@class,'form__item') and not(contains(@class,'form__item--hidden'))]", lambda x, y: (x + y))
         if inside_component:
             res = addStringOrList(res, "//epgu-constructor-component-item", lambda x, y: (x + y))
             if not (label is None):
@@ -87,7 +89,7 @@ class ActionList(ActionO):
 
     def perform(self, driver):
         Logger.logStep(f"Выбираю в списке '{self.label}' ответ '{self.choice}'")
-        listOpen = Action.waitGetElement(driver, Action.getXpathBy(tag="input[contains(@class,'focusable-input')]", label=self.label))
+        listOpen = Action.waitGetElement(driver, Action.getXpathBy(inside_main_screen=True, tag="input[contains(@class,'focusable-input')]", label=self.label))
         listOpen[0].click()
         listEl = Action.waitGetElement(driver, Action.getXpathBy(
             inside_component=False,
@@ -104,7 +106,7 @@ class ActionLookup(ActionO):
 
     def perform(self, driver):
         Logger.logStep(f"Выбираю в списке со словарём '{self.label}' ответ '{self.choice}'")
-        listOpen = Action.waitGetElement(driver, Action.getXpathBy(tag="input[contains(@class,'search-input')]", label=self.label))
+        listOpen = Action.waitGetElement(driver, Action.getXpathBy(inside_main_screen=True, tag="input[contains(@class,'search-input')]", label=self.label))
         listOpen[0].click()
         listOpen[0].send_keys(self.choice)
         time.sleep(1)
@@ -112,7 +114,7 @@ class ActionLookup(ActionO):
             inside_component=False,
             tag="epgu-constructor-component-list-resolver",
             label=self.label,
-            add=f"*[contains(@class,'lookup-list-container expanded')]//*[contains(@class,'lookup-item-text')]//*[contains(.,'{self.choice}')]"
+            add=f"*[contains(@class,'lookup-list-container') and contains(@class,'expanded')]//*[contains(@class,'lookup-item-text')]//*[contains(.,'{self.choice}')]"
         ))
         listEl[0].click()
 
@@ -123,7 +125,7 @@ class ActionInput(ActionO):
 
     def perform(self, driver):
         Logger.logStep(f"Пишу в поле '{self.label}' текст '{self.text}'")
-        inputEl = Action.waitGetElement(driver, Action.getXpathBy(tag=["input", "div[contains(@class,'multiline-input')]", "textarea"], label=self.label))
+        inputEl = Action.waitGetElement(driver, Action.getXpathBy(inside_main_screen=True, tag=["input", "div[contains(@class,'multiline-input')]", "textarea"], label=self.label))
         inputEl[0].send_keys(self.text)
 
 class ActionAddress(ActionO):
@@ -133,7 +135,7 @@ class ActionAddress(ActionO):
 
     def perform(self, driver):
         Logger.logStep(f"Пишу в поле адреса '{self.label}' текст '{self.text}'")
-        inputEl = Action.waitGetElement(driver, Action.getXpathBy(tag=["textarea[contains(@class,'search-input')]"], label=self.label))
+        inputEl = Action.waitGetElement(driver, Action.getXpathBy(inside_main_screen=True, tag=["textarea[contains(@class,'search-input')]"], label=self.label))
         inputEl[0].send_keys(self.text)
         labelEl = Action.waitGetElement(driver, Action.getXpathBy(tag=["p"], label=self.label))
         labelEl[0].click()
@@ -164,6 +166,6 @@ class ActionCheckbox(ActionO):
 
     def perform(self, driver):
         Logger.logStep(f"Нажимаю чекбокс '{self.label}'")
-        checkbox = Action.waitGetElement(driver, Action.getXpathBy(tag="epgu-cf-ui-constructor-constructor-checkbox", label=self.label, add="span[contains(@class,'checkbox')]"))
+        checkbox = Action.waitGetElement(driver, Action.getXpathBy(inside_main_screen=True, tag="epgu-cf-ui-constructor-constructor-checkbox", label=self.label, add="span[contains(@class,'checkbox')]"))
         checkbox[0].click()
 
