@@ -35,6 +35,8 @@ class Action(ABC):
             return ActionFileUpload(ext=lis[1])
         if lis[0] == "vm":
             return ActionDownloadVm()
+        if lis[0] == "pdf":
+            return ActionDownloadPdf()
         if lis[0] == "checkbox":
             return ActionCheckbox(label=lis[1])
         raise Exception("Action.fromList got unexpected action type")
@@ -157,7 +159,17 @@ class ActionDownloadVm(ActionO):
             tag="epgu-constructor-uploader-manager-item[.//img[contains(@alt,'.xml')]]",
             add="button[contains(@class,'download_button')]"
         ))
-        buttonDownload[0].click()
+        buttonDownload[-1].click()
+
+class ActionDownloadPdf(ActionO):
+    def perform(self, driver):
+        Logger.logStep(f"Скачиваю PDF-шаблон", driver)
+        buttonDownload = Action.waitGetElement(driver, Action.getXpathBy(
+            inside_component=False,
+            tag="epgu-constructor-uploader-manager-item[.//img[contains(@alt,'.pdf')]]",
+            add="button[contains(@class,'download_button')]"
+        ))
+        buttonDownload[-1].click()
 
 class ActionCheckbox(ActionO):
     def __init__(self, label):
