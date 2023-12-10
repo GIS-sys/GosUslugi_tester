@@ -17,10 +17,10 @@ c) put it's location into config.py, like this:
 
 1) change config.py if needed
 
-2) add / change scene in ```scenes/``` folder if needed
+2) add / change scene in ```data/``` folder if needed
 
 3) run ```python main.py``` to execute script
 
 4) when asked, input scene file names. For example, you can start by trying:
-```618022_add_changes.scn 618022_convert.scn```
+```example.scn 618022_convert```
 

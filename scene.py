@@ -13,7 +13,7 @@ class Scene:
         self.configure()
 
     def check(self):
-        paths = findFilesByRegex("scenes", f"**/{self.name}.scn")
+        paths = findFilesByRegex("data", f"**/{self.name}.scn")
         if not paths:
             Logger.error(f"Должен существовать файл {self.getName()}")
             exit()
