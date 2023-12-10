@@ -4,6 +4,8 @@ GECKODRIVER_PATH = "/usr/bin/geckodriver"
 LOG_FILE = "network.log"
 # path for downloading vm/pdf
 DOWNLOAD_PATH = "/download"
+# path where all .scn files are
+SCENES_FOLDER = "data"
 
 # if line in .scn file starts with one of these, it will count as a comment
 ACTIONS_COMMENTS = ("#", "//")
