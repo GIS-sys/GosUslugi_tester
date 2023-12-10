@@ -77,6 +77,7 @@ class Driver:
                         f.write(str(item) + "\n")
                 return False
             time.sleep(config.DELAY_BETWEEN_ACTIONS)
+        Logger.success(f"Услуга {scene.getName()} успешно пройдена")
         return True
 
     def run(self, scene):
