@@ -6,6 +6,7 @@ class LogLevel(Enum):
     INFO = 0
     WARNING = 1
     ERROR = 2
+    SUCCESS = 3
 
 class Logger:
     LOG_PATH = os.getcwd() + "/logs"
@@ -52,6 +53,10 @@ class Logger:
         Logger.log(msg, LogLevel.ERROR)
 
     @staticmethod
+    def success(msg):
+        Logger.log(msg, LogLevel.SUCCESS)
+
+    @staticmethod
     def log(msg, log_level):
         if log_level == LogLevel.INFO:
             print(f"{msg}")
@@ -59,6 +64,8 @@ class Logger:
             print(f"\033[33m{msg}\033[0m")
         elif log_level == LogLevel.ERROR:
             print(f"\033[31m{msg}\033[0m")
+        elif log_level == LogLevel.SUCCESS:
+            print(f"\033[32m{msg}\033[0m")
         else:
             print(msg)
 

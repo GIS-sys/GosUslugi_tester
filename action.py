@@ -43,7 +43,7 @@ class Action(ABC):
 
     @staticmethod
     def fromLine(line):
-        return Action.fromList(eval(line))
+        return Action.fromList(eval(f"[{line}]"))
 
     @staticmethod
     def waitGetElement(driver, args):

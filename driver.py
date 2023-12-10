@@ -1,5 +1,4 @@
 from action import Action
-from actions import Actions
 import config
 from logger import Logger
 from utils import tryN
@@ -15,7 +14,7 @@ from selenium.webdriver.common.by import By
 
 class Driver:
     def __init__(self):
-        self.DOWNLOAD_PATH = os.getcwd() + "/download"
+        self.DOWNLOAD_PATH = os.getcwd() + config.DOWNLOAD_PATH
         os.makedirs(self.DOWNLOAD_PATH, exist_ok=True)
         self.options = Options()
         self.options.headless = False
@@ -66,8 +65,8 @@ class Driver:
             raise Exception("Role chosing page is not loaded properly")
         tryN(buttonAuth[0].click, 5, 1)
 
-    def initiate(self, filepath):
-        for action in Actions(filepath):
+    def initiate(self, scene):
+        for action in scene:
             try:
                 action.perform(self)
             except selenium.common.exceptions.TimeoutException as e:
@@ -78,14 +77,15 @@ class Driver:
                         f.write(str(item) + "\n")
                 return False
             time.sleep(config.DELAY_BETWEEN_ACTIONS)
+        Logger.success(f"Услуга {scene.getName()} успешно пройдена")
         return True
 
     def run(self, scene):
-        self.auth(config.AUTH_EMAIL, config.AUTH_PASS)
+        self.auth(scene.getAuthEmail(), scene.getAuthPass())
         time.sleep(2)
-        self.role(config.AUTH_ROLE)
+        self.role(scene.getAuthRole())
         self.chooseService(scene.getNumber())
-        if not self.initiate(scene.getPath()) or config.CLOSE_AFTER_TEST:
+        if not self.initiate(scene) or config.CLOSE_AFTER_TEST:
             time.sleep(config.WAIT_AFTER_TEST)
         else:
             while True:

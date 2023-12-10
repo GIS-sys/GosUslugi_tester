@@ -1,0 +1,37 @@
+! AUTH_EMAIL esiatest002@yandex.ru
+! AUTH_PASS  11111111
+! AUTH_ROLE  Сергеев Сергей  Сергеевич
+! NUMBER 618022
+
+"button", "Начать"
+"button", "УКЭП с компьютера"
+"button", "Заявитель"
+"button", "Внести изменения"
+"button", "Да"
+"button", "Да"
+"button", "Нет"
+"button", "ГУ"
+"button", "Нет"
+"button", "Перейти к заявлению"
+
+"button", "Верно"
+"button", "Верно"
+"button", "Верно"
+"button", "Верно"
+"button", "Да"
+"button", "Да"
+"button", "Электронная почта"
+
+"input", "Номер заявки", "123"
+"button", "Продолжить"
+"checkbox", "Способ производства товара"
+"button", "Продолжить"
+"input", "Данные, которые надо исправить", "AAA"
+"input", "Данные в исправленном виде", "BBB"
+"button", "Продолжить"
+
+"file", "zip"
+"button", "Перейти"
+
+"vm"
+
