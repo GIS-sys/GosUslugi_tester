@@ -1,3 +1,4 @@
+import config
 from driver import Driver
 from logger import Logger
 from utils import findFilesByRegex
@@ -10,6 +11,7 @@ class Scene:
         if self.name.endswith(".scn"):
             self.name = self.name[:-4]
         self.check()
+        self.configure()
 
     def check(self):
         if len(self.name) < 6:
@@ -27,6 +29,26 @@ class Scene:
         self.path = paths[0]
         if len(paths) > 1:
             Logger.warning(f"Предупреждение: было обнаружено несколько сценариев с именем {self.getName()}, использую {self.getPath()}")
+
+    def __iter__(self):
+        with open(self.getPath(), "r") as f:
+            for line in f:
+                line = line.strip()
+                if len(line) == 0 or line.startswith(config.ACTIONS_COMMENTS) or line.startswith(config.CONFIG_LINESTART):
+                    continue
+                yield Action.fromLine(line)
+
+    def configure(self):
+        print("TODO configure" + config.CONFIG_LINESTART)
+
+    def getAuthEmail(self):
+        return self.auth_email
+
+    def getAuthPass(self):
+        return self.auth_pass
+
+    def getAuthRole(self):
+        return self.auth_role
 
     def getName(self):
         return self.name
