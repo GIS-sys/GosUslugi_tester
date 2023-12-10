@@ -39,7 +39,9 @@ class Action(ABC):
             return ActionDownloadPdf()
         if lis[0] == "checkbox":
             return ActionCheckbox(label=lis[1])
-        raise Exception("Action.fromList got unexpected action type")
+        if lis[0] == "find":
+            return ActionFind(label=lis[1])
+        raise Exception(f"Action.fromList got unexpected action type: {lis}")
 
     @staticmethod
     def fromLine(line):
@@ -179,4 +181,12 @@ class ActionCheckbox(ActionO):
         Logger.logStep(f"Нажимаю чекбокс '{self.label}'", driver)
         checkbox = Action.waitGetElement(driver, Action.getXpathBy(inside_main_screen=True, tag="epgu-cf-ui-constructor-constructor-checkbox", label=self.label, add="span[contains(@class,'checkbox')]"))
         checkbox[0].click()
+
+class ActionFind(ActionO):
+    def __init__(self, label):
+        self.label = label
+
+    def perform(self, driver):
+        Logger.logStep(f"Проверяю присутствие на странице текста '{self.label}'", driver)
+        Action.waitGetElement(driver, Action.getXpathBy(inside_component=False, tag="*", label=self.label))
 
