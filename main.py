@@ -1,3 +1,4 @@
+from action import Action
 import config
 from driver import Driver
 from logger import Logger
@@ -14,14 +15,6 @@ class Scene:
         self.configure()
 
     def check(self):
-        if len(self.name) < 6:
-            Logger.error(f"Название файла сценария {self.name} должно начинаться с номера услуги, например: 618022_convert")
-            exit()
-        try:
-            int(self.name[:6])
-        except ValueError:
-            Logger.error(f"Название файла сценария {self.name} должно начинаться с номера услуги, например: 618022_convert")
-            exit()
         paths = findFilesByRegex("scenes", f"**/{self.name}.scn")
         if not paths:
             Logger.error(f"Должен существовать файл {self.getName()}")
@@ -39,7 +32,39 @@ class Scene:
                 yield Action.fromLine(line)
 
     def configure(self):
-        print("TODO configure" + config.CONFIG_LINESTART)
+        self.auth_email, self.auth_pass, self.auth_role = None, None, None
+        self.number = None
+        with open(self.getPath(), "r") as f:
+            for line in f:
+                line = line.strip()
+                if len(line) == 0:
+                    continue
+                if not line.startswith(config.CONFIG_LINESTART):
+                    continue
+                for ls in line:
+                    if line.startswith(ls):
+                        line = line[len(ls):].strip()
+                        break
+                if line.startswith("AUTH_EMAIL"):
+                    self.auth_email = line[len("AUTH_EMAIL"):].strip()
+                if line.startswith("AUTH_PASS"):
+                    self.auth_pass = line[len("AUTH_PASS"):].strip()
+                if line.startswith("AUTH_ROLE"):
+                    self.auth_role = line[len("AUTH_ROLE"):].strip()
+                if line.startswith("NUMBER"):
+                    self.number = line[len("NUMBER"):].strip()
+                
+        if not self.auth_email or not self.auth_pass or not self.auth_role:
+            Logger.error(f"Файл сценария {self.name} не содержит информации о пользователе")
+            exit()
+        if not self.number:
+            Logger.error(f"Файл сценария {self.name} не содержит информации о номере услуги")
+            exit()
+        try:
+            self.number = int(self.number)
+        except ValueError:
+            Logger.error(f"Файл сценария {self.name} содержит некорректный номер услуги: {self.number}")
+            exit()
 
     def getAuthEmail(self):
         return self.auth_email
@@ -57,11 +82,11 @@ class Scene:
         return self.path
 
     def getNumber(self):
-        return int(self.name[:6])
+        return int(self.number)
 
 def inputScenes():
     Logger.info("Введите названия сценариев, которые хотите запустить, через запятую или пробел (данные файлы с расширением .scn должны лежать в папке scenes или любой её подпапке).")
-    Logger.info("Например: 619069.scn, 618022_add_changes, 618022_convert")
+    Logger.info("Например: example.scn, 618022_convert.scn")
     scenes = input().replace(" ", ",").split(",")
     scenes = [x for x in scenes if x != ""]
     scenes = list(map(str.strip, scenes))
