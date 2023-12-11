@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+import config
 from logger import Logger
 import selenium
 from selenium.webdriver.common.by import By
@@ -117,8 +118,9 @@ class ActionLookup(ActionO):
         Logger.logStep(f"Выбираю в списке со словарём '{self.label}' ответ '{self.choice}'", driver)
         listOpen = Action.waitGetElement(driver, Action.getXpathBy(inside_main_screen=True, tag="input[contains(@class,'search-input')]", label=self.label))
         listOpen[0].click()
+        time.sleep(config.DELAY_ACTION_LOOKUP / 2)
         listOpen[0].send_keys(self.choice)
-        time.sleep(1)
+        time.sleep(config.DELAY_ACTION_LOOKUP / 2)
         listEls = Action.waitGetElement(driver, Action.getXpathBy(
             inside_component=False,
             tag="epgu-constructor-component-list-resolver",
@@ -151,7 +153,7 @@ class ActionAddress(ActionO):
         inputEl = Action.waitGetElement(driver, Action.getXpathBy(inside_main_screen=True, tag=["textarea[contains(@class,'search-input')]"], label=self.label))
         inputEl[0].send_keys(self.text)
         Action.clickOutside(driver)
-        time.sleep(1)
+        time.sleep(config.DELAY_ACTION_ADDRESS)
 
 class ActionFileUpload(ActionO):
     def __init__(self, ext):
