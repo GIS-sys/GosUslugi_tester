@@ -1,13 +1,11 @@
 ! AUTH_EMAIL esiatest002@yandex.ru
 ! AUTH_PASS  11111111
 ! AUTH_ROLE  Сергеев Сергей  Сергеевич
-! NUMBER 618022
+! NUMBER 621862
 
 "button", "Начать"
-"button", "УКЭП с компьютера"
 "button", "Заявитель"
 "button", "Внести изменения"
-"button", "Да"
 "button", "Да"
 "button", "Нет"
 "button", "ГУ"

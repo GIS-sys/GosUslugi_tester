@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod
 from logger import Logger
+import selenium
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
@@ -48,8 +49,8 @@ class Action(ABC):
         return Action.fromList(eval(f"[{line}]"))
 
     @staticmethod
-    def waitGetElement(driver, args):
-        return WebDriverWait(driver.driver, 10).until(EC.presence_of_all_elements_located(args))
+    def waitGetElement(driver, args, timeout=10):
+        return WebDriverWait(driver.driver, timeout).until(EC.presence_of_all_elements_located(args))
 
     @staticmethod
     def getXpathBy(inside_main_screen=False, inside_component=True, tag=None, label=None, add=None):
@@ -71,6 +72,10 @@ class Action(ABC):
             res = addStringOrList(res, add, lambda x, y: (x + "//{add}".format(add=y)))
         res = '|'.join(res)
         return (By.XPATH, res)
+
+    @staticmethod
+    def clickOutside(driver):
+        Action.waitGetElement(driver, (By.XPATH, "//html"))[0].click()
 
 class ActionO(ABC):
     @abstractmethod
@@ -114,13 +119,17 @@ class ActionLookup(ActionO):
         listOpen[0].click()
         listOpen[0].send_keys(self.choice)
         time.sleep(1)
-        listEl = Action.waitGetElement(driver, Action.getXpathBy(
+        listEls = Action.waitGetElement(driver, Action.getXpathBy(
             inside_component=False,
             tag="epgu-constructor-component-list-resolver",
             label=self.label,
-            add=f"*[contains(@class,'lookup-list-container') and contains(@class,'expanded')]//*[contains(@class,'lookup-item-text')]//*[contains(.,'{self.choice}')]"
+            add=f"*[contains(@class,'lookup-list-container') and contains(@class,'expanded')]//*[contains(@class,'lookup-item-text')]"
         ))
-        listEl[0].click()
+        for el in listEls:
+            if self.choice in el.get_attribute('innerHTML'):
+                el.click()
+                return
+        raise selenium.common.exceptions.TimeoutException("ActionLookup - perform - timeout")
 
 class ActionInput(ActionO):
     def __init__(self, label, text):
@@ -141,8 +150,8 @@ class ActionAddress(ActionO):
         Logger.logStep(f"Пишу в поле адреса '{self.label}' текст '{self.text}'", driver)
         inputEl = Action.waitGetElement(driver, Action.getXpathBy(inside_main_screen=True, tag=["textarea[contains(@class,'search-input')]"], label=self.label))
         inputEl[0].send_keys(self.text)
-        labelEl = Action.waitGetElement(driver, Action.getXpathBy(tag=["p"], label=self.label))
-        labelEl[0].click()
+        Action.clickOutside(driver)
+        time.sleep(1)
 
 class ActionFileUpload(ActionO):
     def __init__(self, ext):
