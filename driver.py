@@ -82,7 +82,7 @@ class Driver:
 
     def run(self, scene):
         self.auth(scene.getAuthEmail(), scene.getAuthPass())
-        time.sleep(2)
+        time.sleep(3)
         self.role(scene.getAuthRole())
         self.chooseService(scene.getNumber())
         if not self.initiate(scene) or config.CLOSE_AFTER_TEST:
