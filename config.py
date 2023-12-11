@@ -15,6 +15,10 @@ CONFIG_LINESTART = ("!")
 # delay between each interaction with browser
 # if you have problems with script missing some clicks, consider setting it to a higher value
 DELAY_BETWEEN_ACTIONS = 0.15
+# total delay during LOOKUP action
+DELAY_ACTION_LOOKUP = 2
+# total delay during ADDRESS action
+DELAY_ACTION_ADDRESS = 1
 
 # if set to True, will close browser automatically after completing all actions
 CLOSE_AFTER_TEST = True
