@@ -1,6 +1,6 @@
 ! AUTH_EMAIL esiatest002@yandex.ru
 ! AUTH_PASS  11111111
-! AUTH_ROLE  Сергеев Сергей  Сергеевич
+! AUTH_ROLE  Фамилия002
 ! NUMBER     619069
 
 "button", "Начать"
@@ -80,6 +80,6 @@
 "button", "Нет"
 
 "find", "Подпишите документы"
-# "vm"
+"vm"
 # "pdf"
 
