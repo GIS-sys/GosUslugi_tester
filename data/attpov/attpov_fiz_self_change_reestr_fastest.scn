@@ -1,13 +1,13 @@
 ! AUTH_EMAIL esiatest002@yandex.ru
 ! AUTH_PASS  11111111
-! AUTH_ROLE  Фамилия
+! AUTH_ROLE  Тестов
 ! NUMBER     619069
 
 "button", "Начать"
 "button", "За себя"
-"button", "УКЭП"
 "list", "Перечень услуг", "Внести изменения"
 "button", "Продолжить"
+"button", "УКЭП с компьютера"
 "button", "Нет"
 "find", "усиленной квалифицированной"
 "button", "Перейти"
