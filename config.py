@@ -14,7 +14,7 @@ CONFIG_LINESTART = ("!")
 
 # delay between each interaction with browser
 # if you have problems with script missing some clicks, consider setting it to a higher value
-DELAY_BETWEEN_ACTIONS = 0.15
+DELAY_BETWEEN_ACTIONS = 0.25
 # total delay during LOOKUP action
 DELAY_ACTION_LOOKUP = 2
 # total delay during ADDRESS action

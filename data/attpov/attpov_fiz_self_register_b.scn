@@ -1,13 +1,13 @@
 ! AUTH_EMAIL esiatest002@yandex.ru
 ! AUTH_PASS  11111111
-! AUTH_ROLE  Фамилия
+! AUTH_ROLE  Тестов
 ! NUMBER     619069
 
 "button", "Начать"
 "button", "За себя"
-"button", "УКЭП"
 "list", "Перечень услуг", "Аттестоваться"
 "button", "Продолжить"
+"button", "УКЭП с компьютера"
 
 "button", "Да"
 "button", "Повторное рассмотрение"
@@ -27,6 +27,7 @@
 "button", "Верно"
 "button", "Верно"
 "button", "Верно"
+"find", "Адрес для переписки на территории РФ совпадает с адресом постоянной регистрации?"
 "button", "Да"
 "button", "Да"
 "input", "Адрес сайта", "www.tish.ang"
