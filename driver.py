@@ -69,8 +69,11 @@ class Driver:
         for action in scene:
             try:
                 action.perform(self)
-            except selenium.common.exceptions.TimeoutException as e:
-                Logger.logError("Время ожидания действия истекло", self)
+            except Exception as e:
+                if isinstance(e, selenium.common.exceptions.TimeoutException):
+                    Logger.logError("Время ожидания действия истекло", self)
+                else:
+                    Logger.logError(f"{str(e)}", self)
                 test = self.driver.execute_script("var performance = window.performance || window.mozPerformance || window.msPerformance || window.webkitPerformance || {}; var network = performance.getEntries() || {}; return network;")
                 with open(config.LOG_FILE, "a") as f:
                     for item in test:

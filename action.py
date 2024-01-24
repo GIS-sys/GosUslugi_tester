@@ -43,6 +43,8 @@ class Action(ABC):
             return ActionCheckbox(label=lis[1])
         if lis[0] == "find":
             return ActionFind(label=lis[1])
+        if lis[0] == "not_find":
+            return ActionNotFind(label_not_find=lis[1], label_find=lis[2])
         raise Exception(f"Action.fromList got unexpected action type: {lis}")
 
     @staticmethod
@@ -200,4 +202,19 @@ class ActionFind(ActionO):
     def perform(self, driver):
         Logger.logStep(f"Проверяю присутствие на странице текста '{self.label}'", driver)
         Action.waitGetElement(driver, Action.getXpathBy(inside_component=False, tag="*", label=self.label))
+
+class ActionNotFind(ActionO):
+    def __init__(self, label_not_find, label_find):
+        self.label_not_find = label_not_find
+        self.label_find = label_find
+
+    def perform(self, driver):
+        Logger.logStep(f"Проверяю присутствие на странице текста '{self.label_find}'", driver)
+        Action.waitGetElement(driver, Action.getXpathBy(inside_component=False, tag="*", label=self.label_find))
+        Logger.logStep(f"Проверяю отсутствие на странице текста '{self.label_not_find}'", driver)
+        try:
+            Action.waitGetElement(driver, Action.getXpathBy(inside_component=False, tag="*", label=self.label_not_find))
+            raise Exception(f"Element '{self.label_not_find}' was found")
+        except selenium.common.exceptions.TimeoutException as e:
+            pass
 
